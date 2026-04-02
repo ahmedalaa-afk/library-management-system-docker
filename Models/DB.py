@@ -4,7 +4,7 @@ from pymysql.cursors import DictCursor
 
 class DB(object):
 	"""Initialize mysql database """
-	host = "localhost"
+	host = "database"
 	user = "root"
 	password = ""
 	db = "lms"
