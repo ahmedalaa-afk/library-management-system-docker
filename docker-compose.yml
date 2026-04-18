@@ -19,3 +19,16 @@ services:
       MYSQL_DATABASE: lms
     ports:
       - "3306:3306"
+  
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=database
+      - PMA_PORT=3306
+      - PMA_USER=root
+    depends_on:
+      - database
