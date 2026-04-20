@@ -6,6 +6,5 @@ COPY requirements.txt ./
 RUN pip install -r requirements.txt
 
 COPY . .
-RUN chmod +x run
-CMD [ "flask", "run" ]
 
+CMD [ "python", "-m", "flask", "run" ]

@@ -11,6 +11,8 @@ services:
       - .:/usr/src/app
     depends_on:
       - database
+    networks:
+      - lms
 
   database:
     image: mysql:latest
@@ -19,6 +21,10 @@ services:
       MYSQL_DATABASE: lms
     ports:
       - "3306:3306"
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - lms
   
   phpmyadmin:
     image: phpmyadmin
@@ -32,3 +38,11 @@ services:
       - PMA_USER=root
     depends_on:
       - database
+    networks:
+      - lms
+
+networks:
+  lms:
+    driver: bridge
+volumes:
+  db:
