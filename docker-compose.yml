@@ -23,6 +23,7 @@ services:
       - "3306:3306"
     volumes:
       - db:/var/lib/mysql
+      - ./db/lms.sql:/docker-entrypoint-initdb.d/lms.sql
     networks:
       - lms
   
