@@ -18,22 +18,10 @@ spec:
           ports:
             - containerPort: 3306
           env:
-            - name: PMA_HOST
-              value: "database"
-            - name: PMA_PORT
-              value: "3306"
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: "true"
             - name: MYSQL_DATABASE
               value: "lms"
-          volumeMounts:
-            - name: mysql-initdb
-              mountPath: /docker-entrypoint-initdb.d
-      volumes:
-        - name: mysql-initdb
-          configMap:
-            name: mysql-initdb-config
-
 ---
 apiVersion: v1
 kind: Service
