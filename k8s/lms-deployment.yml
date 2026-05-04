@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: library-management-system
-          image: library-management-system:latest
-          imagePullPolicy: Never
+          image: ahmedafk/library-management-system:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5000
           env:
@@ -31,9 +31,10 @@ kind: Service
 metadata:
   name: lms-service
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: lms-service
   ports:
     - port: 5000
       targetPort: 5000
+      nodePort: 30500
