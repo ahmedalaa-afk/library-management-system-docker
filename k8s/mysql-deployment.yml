@@ -1,13 +1,15 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: database-pvc
+  name: lms-pvc
 spec:
-  accessModes:
-    - ReadWriteOnce
   resources:
     requests:
       storage: 3Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -34,12 +36,19 @@ spec:
             - name: MYSQL_DATABASE
               value: "lms"
           volumeMounts:
+            - name: lms-sql
+              mountPath: /docker-entrypoint-initdb.d/lms.sql
+              subPath: lms.sql
             - name: database-storage
               mountPath: /var/lib/mysql
       volumes:
+        - name: lms-sql
+          configMap:
+            name: lms-sql
         - name: database-storage
           persistentVolumeClaim:
-            claimName: database-pvc
+            claimName: lms-pvc
+
 ---
 apiVersion: v1
 kind: Service
