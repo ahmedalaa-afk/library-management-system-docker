@@ -42,7 +42,7 @@ jobs:
 
       - name: apply manifest files
         run: |
-          kubectl apply -f k8s/db-config.yml
-          kubectl apply -f k8s/lms-deployment.yml
-          kubectl apply -f k8s/mysql-deployment.yml
-          kubectl apply -f k8s/pma-deployment.yml
+          kubectl apply -f library-management-system-docker/k8s/db-config.yml
+          kubectl apply -f library-management-system-docker/k8s/lms-deployment.yml
+          kubectl apply -f library-management-system-docker/k8s/mysql-deployment.yml
+          kubectl apply -f library-management-system-docker/k8s/pma-deployment.yml
