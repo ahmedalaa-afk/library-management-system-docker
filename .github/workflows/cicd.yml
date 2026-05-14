@@ -38,7 +38,7 @@ jobs:
         run: sudo docker pull ahmedafk404/library-management-system:latest
 
       - name: clone github repo
-        run: git clone https://github.com/ahmedafk404/library-management-system-docker.git
+        run: git clone https://github.com/ahmedalaa-afk/library-management-system-docker.git
 
       - name: apply manifest files
         run: |
