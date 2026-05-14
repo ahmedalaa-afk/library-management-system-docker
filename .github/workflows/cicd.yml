@@ -35,7 +35,7 @@ jobs:
         run: sudo yum update -y && sudo yum install git -y
 
       - name: pull docker image
-        run: docker pull ahmedafk404/library-management-system:latest
+        run: sudo docker pull ahmedafk404/library-management-system:latest
 
       - name: clone github repo
         run: git clone https://github.com/ahmedafk404/library-management-system-docker.git
