@@ -23,3 +23,26 @@ jobs:
           context: . # the context is the current directory
           push: true # push the image to Docker Hub
           tags: ahmedafk404/library-management-system:latest # the name of the image on Docker Hub
+
+  selfhosted-kubernetes-deploy:
+    needs: build-and-push
+    runs-on: self-hosted
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: install git
+        run: sudo yum update -y && sudo yum install git -y
+
+      - name: pull docker image
+        run: docker pull ahmedafk404/library-management-system:latest
+
+      - name: clone github repo
+        run: git clone https://github.com/ahmedafk404/library-management-system-docker.git
+
+      - name: apply manifest files
+        run: |
+          kubectl apply -f k8s/db-config.yml
+          kubectl apply -f k8s/lms-deployment.yml
+          kubectl apply -f k8s/mysql-deployment.yml
+          kubectl apply -f k8s/pma-deployment.yml
