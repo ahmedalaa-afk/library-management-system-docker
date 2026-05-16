@@ -40,6 +40,9 @@ jobs:
       - name: clone github repo
         run: git clone https://github.com/ahmedalaa-afk/library-management-system-docker.git
 
+      - name: print working dir
+        run: pwd
+
       - name: apply manifest files
         run: |
           sudo kubectl apply -f library-management-system-docker/k8s/db-config.yml
