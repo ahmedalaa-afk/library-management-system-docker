@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.mysql.pvc.name }}
+spec:
+  resources:
+    requests:
+      storage: {{ .Values.mysql.pvc.storage }}
+  volumeMode: {{ .Values.mysql.pvc.volumeMode }}
+  accessModes:
+    - {{ .Values.mysql.pvc.accessModes }}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.mysql.name }}
+spec:
+  replicas: {{ .Values.mysql.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.mysql.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.mysql.name }}
+    spec:
+      containers:
+        - name: {{ .Values.mysql.name }}
+          image: {{ .Values.mysql.image }}
+          ports:
+            - containerPort: {{ .Values.mysql.containerPort }}
+          env:
+            - name: MYSQL_ALLOW_EMPTY_PASSWORD
+              value: "true"
+            - name: MYSQL_DATABASE
+              value: "lms"
+          volumeMounts:
+            - name: lms-sql
+              mountPath: /docker-entrypoint-initdb.d/lms.sql
+              subPath: lms.sql
+            - name: database-storage
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: lms-sql
+          configMap:
+            name: lms-sql
+        - name: database-storage
+          persistentVolumeClaim:
+            claimName: {{ .Values.mysql.pvc.name }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.mysql.name }}
+spec:
+  type: {{ .Values.mysql.service.type }}
+  selector:
+    app: {{ .Values.mysql.name }}
+  ports:
+    - port: {{ .Values.mysql.service.port }}
+      targetPort: {{ .Values.mysql.service.targetPort }}

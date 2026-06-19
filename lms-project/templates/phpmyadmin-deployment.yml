@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.phpmyadmin.name }}
+spec:
+  replicas: {{ .Values.phpmyadmin.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.phpmyadmin.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.phpmyadmin.name }}
+    spec:
+      containers:
+      - name: {{ .Values.phpmyadmin.name }}
+        image: {{ .Values.phpmyadmin.image }}
+        ports:
+          - containerPort: {{ .Values.phpmyadmin.containerPort }}
+        env:
+          - name: PMA_ARBITRARY
+            value: "1"
+          - name: PMA_HOST
+            value: "database"
+          - name: PMA_PORT
+            value: "3306"
+          - name: PMA_USER
+            value: "root"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.phpmyadmin.service.name }}
+spec:
+  type: {{ .Values.phpmyadmin.service.type }}
+  selector:
+    app: {{ .Values.phpmyadmin.name }}
+  ports:
+    - port: {{ .Values.phpmyadmin.service.port }}
+      targetPort: {{ .Values.phpmyadmin.service.targetPort }}

@@ -21,6 +21,6 @@ spec:
           pathType: Prefix
           backend:
             service:
-              name: phpmyadmin-service
+              name: phpmyadmin
               port:
                 number: 80

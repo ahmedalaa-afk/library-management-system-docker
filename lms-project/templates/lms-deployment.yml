@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: lms-deployment
+  name: {{ .Values.lms.name }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.lms.replicas }}
   selector:
     matchLabels:
-      app: lms-deployment
+      app: {{ .Values.lms.name }}
   template:
     metadata:
       labels:
-        app: lms-deployment
+        app: {{ .Values.lms.name }}
     spec:
       initContainers:
         - name: init-container
-          image: ahmedafk404/library-management-system:latest
+          image: {{ .Values.lms.image }}
           command:
             - "sh"
             - "-c"
@@ -25,10 +25,10 @@ spec:
               mountPath: /shared-code/
       containers:
         - name: nginx
-          image: nginx:latest
+          image: {{ .Values.nginx.image }}
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 80
+            - containerPort: {{ .Values.nginx.containerPort }}
           env:
             - name: NGINX_ENTRYPOINT_QUIET_LOGS
               value: "1"
@@ -40,10 +40,10 @@ spec:
               mountPath: /app
 
         - name: library-management-system
-          image: ahmedafk404/library-management-system:latest
+          image: {{ .Values.lms.image }}
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 5000
+            - containerPort: {{ .Values.lms.containerPort }}
           env:
             - name: FLASK_APP
               value: "app.py"
@@ -62,11 +62,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: lms-service
+  name: {{ .Values.lms.service.name }}
 spec:
-  type: ClusterIP
+  type: {{ .Values.lms.service.type }}
   selector:
-    app: lms-deployment
+    app: {{ .Values.lms.name }}
   ports:
-    - port: 80
-      targetPort: 80
+    - port: {{ .Values.lms.service.port }}
+      targetPort: {{ .Values.lms.service.targetPort }}
