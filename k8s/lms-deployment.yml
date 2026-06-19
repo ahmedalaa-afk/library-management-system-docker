@@ -12,9 +12,35 @@ spec:
       labels:
         app: lms-service
     spec:
+      initContainers:
+        - name: init-container
+          image: ahmedafk404/library-management-system:latest
+          command:
+            - "sh"
+            - "-c"
+            - |
+              cp -r /app/. /shared-code/
+          volumeMounts:
+            - name: shared-code
+              mountPath: /shared-code/
       containers:
+        - name: nginx
+          image: nginx:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          env:
+            - name: NGINX_ENTRYPOINT_QUIET_LOGS
+              value: "1"
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/conf.d/default.conf
+              subPath: default.conf
+            - name: shared-code
+              mountPath: /app
+
         - name: library-management-system
-          image: ahmedafk/library-management-system:latest
+          image: ahmedafk404/library-management-system:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5000
@@ -23,18 +49,24 @@ spec:
               value: "app.py"
             - name: FLASK_ENV
               value: "development"
-            - name: FLASK_RUN_HOST
-              value: "0.0.0.0"
+          volumeMounts:
+            - name: shared-code
+              mountPath: /app
+      volumes:
+        - name: shared-code
+          emptyDir: {}
+        - name: nginx-config
+          configMap:
+            name: nginx-config
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: lms-service
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: lms-service
   ports:
-    - port: 5000
-      targetPort: 5000
-      nodePort: 30500
+    - port: 80
+      targetPort: 80

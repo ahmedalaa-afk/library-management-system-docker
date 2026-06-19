@@ -1,13 +1,28 @@
-#Builder Stage
-FROM python:3 as builder
-WORKDIR /usr/src/app
-COPY requirements.txt ./
+FROM python:3-slim AS builder
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir --user -r requirements.txt
+
 COPY . .
 
-
-#Runtime Stage
+# ==========================================
 FROM python:3-slim AS runtime
-WORKDIR /usr/src/app
-COPY --from=builder /usr/src/app /usr/src/app
-RUN pip install -r requirements.txt
-CMD [ "python", "-m", "flask", "run" ]
+WORKDIR /app
+
+COPY --from=builder /root/.local /root/.local
+COPY --from=builder /app /app
+
+ENV PATH=/root/.local/bin:$PATH
+
+ENV FLASK_APP=app.py
+ENV FLASK_ENV=production
+
+EXPOSE 5000
+
+CMD [ "python", "-m", "flask", "run", "--host=0.0.0.0", "--port=5000" ]
