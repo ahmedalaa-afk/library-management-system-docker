@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: library-management-system
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/ahmedalaa-afk/library-management-system-docker.git'
+    path: lms-project/templates
+    targetRevision: master
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

@@ -4,15 +4,23 @@ metadata:
   name: lms-ingress
 spec:
   rules:
-    {{ range .Values.ingress.hosts }}
-    - host: {{ .host }}
+    - host: lms.test
       http:
         paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: {{ .serviceName }}
-                port:
-                  number: {{ .servicePort }}
-    {{ end }}
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: lms-service
+              port:
+                number: 80
+    - host: phpmyadmin.test
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: phpmyadmin
+              port:
+                number: 80
