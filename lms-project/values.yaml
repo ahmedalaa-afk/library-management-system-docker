@@ -1,6 +1,6 @@
 lms:
   replicas: 1
-  name: lms-deployment
+  name: lms-app
   image: ahmedafk404/library-management-system:latest
   containerPort: 5000
   service:
@@ -8,10 +8,12 @@ lms:
     type: ClusterIP
     port: 80
     targetPort: 80
+
 nginx:
   name: nginx
   image: nginx:latest
   containerPort: 80
+
 mysql:
   name: database
   image: mysql:8.0
@@ -21,28 +23,21 @@ mysql:
     name: lms-pvc
     storage: 3Gi
     volumeMode: Filesystem
-    accessModes: ReadWriteOnce
+    accessModes:
+      - ReadWriteOnce
   service:
-    name: database
+    name: mysql-service
     type: ClusterIP
     port: 3306
     targetPort: 3306
+
 phpmyadmin:
   name: phpmyadmin
-  image: phpmyadmin
+  image: phpmyadmin:latest
   containerPort: 80
   replicas: 1
   service:
-    name: phpmyadmin
+    name: phpmyadmin-service
     type: ClusterIP
-    port: 80
+    port: 8080
     targetPort: 80
-ingress:
-  name: lms-ingress
-  hosts:
-    - host: lms.test
-      serviceName: lms-service
-      servicePort: 80
-    - host: phpmyadmin.test
-      serviceName: phpmyadmin
-      servicePort: 80

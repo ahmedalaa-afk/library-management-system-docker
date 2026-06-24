@@ -62,11 +62,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.lms.service.name }}
+  name: {{ .Values.lms.service.name | quote }}
 spec:
-  type: {{ .Values.lms.service.type }}
+  type: {{ .Values.lms.service.type | default "ClusterIP" }}
   selector:
-    app: {{ .Values.lms.name }}
+    app: {{ .Values.lms.name | quote }}
   ports:
     - port: {{ .Values.lms.service.port }}
       targetPort: {{ .Values.lms.service.targetPort }}
