@@ -7,8 +7,8 @@ spec:
   project: default
   source:
     repoURL: 'https://github.com/ahmedalaa-afk/library-management-system-docker.git'
-    path: lms-project/templates
-    targetRevision: master
+    path: lms-project
+    targetRevision: main
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: default
