@@ -42,7 +42,7 @@ $ docker-compose up -d --build
 I use kind with ingress.
 It will create cluster and allow ingress request on port 80.
 ```bash
-$ kubectl apply -f k8s/kind-config.yml
+$ kind create cluster --config=k8s/kind-config.yml
 ```
 ### Install Ingress Controller
 ```bash
