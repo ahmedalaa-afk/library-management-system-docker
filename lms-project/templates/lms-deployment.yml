@@ -63,14 +63,17 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ .Values.lms.service.name | quote }}
+  labels:
+    app: {{ .Values.lms.name | quote }}
   annotations:
     prometheus.io/scrape: "true"
-    prometheus.io/port: "80"
+    prometheus.io/port: "5000"
     prometheus.io/path: "/metrics"
 spec:
   type: {{ .Values.lms.service.type | default "ClusterIP" }}
   selector:
     app: {{ .Values.lms.name | quote }}
   ports:
-    - port: {{ .Values.lms.service.port }}
+    - name: metrics
+      port: {{ .Values.lms.service.port }}
       targetPort: {{ .Values.lms.service.targetPort }}
