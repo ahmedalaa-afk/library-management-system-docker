@@ -63,6 +63,10 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ .Values.lms.service.name | quote }}
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "80"
+    prometheus.io/path: "/metrics"
 spec:
   type: {{ .Values.lms.service.type | default "ClusterIP" }}
   selector:
