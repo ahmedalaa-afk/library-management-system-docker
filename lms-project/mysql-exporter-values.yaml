@@ -1,0 +1,10 @@
+mysql:
+  user: "root"
+  password: "root"
+  host: "database"
+  port: 3306
+
+serviceMonitor:
+  enabled: true
+  additionalLabels:
+    release: prometheus

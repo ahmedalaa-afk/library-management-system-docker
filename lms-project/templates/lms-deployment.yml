@@ -65,10 +65,6 @@ metadata:
   name: {{ .Values.lms.service.name | quote }}
   labels:
     app: {{ .Values.lms.name | quote }}
-  annotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "5000"
-    prometheus.io/path: "/metrics"
 spec:
   type: {{ .Values.lms.service.type | default "ClusterIP" }}
   selector:

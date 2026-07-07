@@ -26,6 +26,8 @@ spec:
             value: "3306"
           - name: PMA_USER
             value: "root"
+          - name: PMA_PASSWORD
+            value: "root"
 
 ---
 apiVersion: v1
