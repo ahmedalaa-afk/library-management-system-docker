@@ -3,6 +3,7 @@ kind: Ingress
 metadata:
   name: lms-ingress
 spec:
+  ingressClassName: nginx
   rules:
     - host: lms.test
       http:
